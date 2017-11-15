@@ -1,12 +1,11 @@
+import java.util.ArrayList;
 
 public class Eleve {
 	
-	public static void main(String[] args) {
-		
-		int a = 1;
-		a ++;
-		a ++;
-		System.out.print("DiguiDamn : "+a);
-	}
-
+	public int idEleve;
+	public int noteMaj;
+	public ArrayList<Eleve> prefEleves = new ArrayList();
+	public ArrayList<Projet> prefProjets = new ArrayList();
+	public ArrayList<Eleve> camarades = new ArrayList();
+	
 }
