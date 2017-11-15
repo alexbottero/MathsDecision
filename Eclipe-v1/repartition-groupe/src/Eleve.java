@@ -5,6 +5,7 @@ public class Eleve {
 		
 		int a = 1;
 		a ++;
+		a ++;
 		System.out.print("DiguiDamn : "+a);
 	}
 
