@@ -20,8 +20,8 @@ class Promo:
 
 		self.classementEleve = []
 		self.eleveRepartis = 0
-		self.critereE = 0
-		self.critereP = 0
+		self.critereE = 200
+		self.critereP = 200
 
 	def ajouterEleve (self, numero, prefE, prefP):
 		e = Eleve(numero, prefE, prefP)
@@ -30,7 +30,7 @@ class Promo:
 
 	def ajouterProjet (self, numero):
 		p = Projet(numero)
-		self.projets.append(numero)
+		self.projets.append(p)
 
 	def noteMajoritaire(self, eleve):
 	# noteMajoritaire : int -> str
@@ -123,70 +123,81 @@ class Promo:
 			T.remove(T[i])
 
 
-	def binomeValide(e1, e2):
+	def binomeValide(self, e1, e2):
 
 		l = e2.prefEleve
 
 		nb = 0
 		resultat = False
 
-		if (l[e1] == 'T'):
+		if (l[e1.numeroEleve] == 'T'):
 			resultat = True
 		else:
 			nb += l.count('T')
 		
-		if (nb < self.critereE and l[e1] == 'B'):
+		if (nb < self.critereE and l[e1.numeroEleve] == 'B'):
 			resultat = True		
 		else:
 			nb += l.count('B')
 
-		if(nb < self.critereE and peB == 'AB'):
+		if(nb < self.critereE and l[e1.numeroEleve] == 'AB'):
 			resultat = True		
 		else:
 			nb += l.count('AB')
 
-		if(nb < self.critereE and peB == 'P'):
+		if(nb < self.critereE and l[e1.numeroEleve] == 'P'):
 			resultat = True
 		else:
 			nb += l.count('P')
 
-		if(nb < self.critereE and peB == 'AR'):
+		if(nb < self.critereE and l[e1.numeroEleve] == 'AR'):
 			resultat = True
 		else:
 			nb += l.count('AR')
 
 		return resultat
 
-	def projetValide(e, p):
+	def projetValide(self, e, p):
 
 
-		l = e.projetPrefere()
+		l = e.prefProjet
 
+		nb = 0
 		resultat = False
 
-		if (l[0].count(p) > 0):
+		if (l[p.numeroProjet] == 'T'):
 			resultat = True
 		else:
-			nb += len(l[0])
+			nb += l.count('T')
 		
-		if (nb < self.critereP and l[1].count(p) > 0):
+		if (nb < self.critereP and l[p.numeroProjet] == 'B'):
 			resultat = True		
 		else:
-			nb += len(l[1])
+			nb += l.count('B')
 
-		if(nb < self.critereP and l[2].count(p) > 0):
+		if(nb < self.critereP and l[p.numeroProjet] == 'AB'):
 			resultat = True		
 		else:
-			nb += len(l[2])
+			nb += l.count('AB')
 
-		if(nb < self.critereP and l[3].count(p) > 0):
+		if(nb < self.critereP and l[p.numeroProjet] == 'P'):
 			resultat = True
 		else:
-			nb += len(l[3])
+			nb += l.count('P')
 
-		if(nb < self.critereP and l[4].count(p) > 0):
+		if(nb < self.critereP and l[p.numeroProjet] == 'AR'):
 			resultat = True
 		else:
-			nb += len(l[4])
+			nb += l.count('AR')
 
 		return resultat
+
+	def getEleve(self, i):
+
+		eleve = self.eleves[i]
+		return eleve
+
+	def getProjet(self, i):
+
+		projet = self.projets[i]
+		return projet

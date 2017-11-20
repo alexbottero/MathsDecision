@@ -18,14 +18,17 @@ class Eleve:
 	def majNote (self, note):
 		self.note = note
 
+	def majProjet (self, projet):
+		self.projet = projet
 
-	def elevePrefere ():
+
+	def elevePrefere (self, promo):
 	# elevePrefere :  -> [int]
 	# Donnees : 
 	# Preconditions :            
 	# Resultat : Retourne la liste d'eleve prefere dans l'ordre
 
-		if (len(prefEleveTrie) == 0):
+		if (len(self.prefEleveTrie) == 0):
 			#On creer des tableau temporaire pour recuperer les objet en fonction de la note qu'a donne ea
 			T = []
 			B = []
@@ -36,52 +39,52 @@ class Eleve:
 			eleve = 0
 			for i in self.prefEleve:
 				if (i=='T'):
-					T.append(eleve)
+					T.append(promo.getEleve(eleve))
 				elif (i=='B'):
-					B.append(eleve)
+					B.append(promo.getEleve(eleve))
 				elif (i=='AB'):
-					AB.append(eleve)
+					AB.append(promo.getEleve(eleve))
 				elif (i=='P'):
-					P.append(eleve)
+					P.append(promo.getEleve(eleve))
 				elif (i=='AR'):
-					AR.append(eleve)
+					AR.append(promo.getEleve(eleve))
 				eleve += 1
 
 			#On choisit un eleve au hasard en commencant par les eleves les moins apprecie, puis on l'ajoute dans le classement
 			while (len(T) != 0):
 				i = random.randint(0, len(T)-1)
-				prefEleveTrie.append(T[i])
+				self.prefEleveTrie.append(T[i])
 				T.remove(T[i])
 
 			while (len(B) != 0):
 				i = random.randint(0, len(B)-1)
-				prefEleveTrie.append(B[i])
+				self.prefEleveTrie.append(B[i])
 				B.remove(B[i])
 
 			while (len(AB) != 0):
 				i = random.randint(0, len(AB)-1)
-				prefEleveTrie.append(AB[i])
+				self.prefEleveTrie.append(AB[i])
 				AB.remove(AB[i])
 
 			while (len(P) != 0):
 				i = random.randint(0, len(P)-1)
-				prefEleveTrie.append(P[i])
+				self.prefEleveTrie.append(P[i])
 				P.remove(P[i])
 
 			while (len(AR) != 0):
 				i = random.randint(0, len(AR)-1)
-				prefEleveTrie.append(AR[i])
+				self.prefEleveTrie.append(AR[i])
 				AR.remove(AR[i])
 
 		#return [T, B, AB, P, AR]
 
-	def projetPrefere ():
+	def projetPrefere (self, promo):
     # elevePrefere :  -> [int]
     # Donnees : 
     # Preconditions :            
     # Resultat : Retourne la liste d'eleve prefere dans l'ordre
 
-		if (len(prefProjetTrie) == 0):
+		if (len(self.prefProjetTrie) == 0):
 	    	#On creer des tableau temporaire pour recuperer les objet en fonction de la note qu'a donne ea
 			T = []
 			B = []
@@ -92,41 +95,41 @@ class Eleve:
 			projet = 0
 			for i in self.prefProjet:
 				if (i=='T'):
-					T.append(projet)
+					T.append(promo.getProjet(projet))
 				elif (i=='B'):
-					B.append(projet)
+					B.append(promo.getProjet(projet))
 				elif (i=='AB'):
-					AB.append(projet)
+					AB.append(promo.getProjet(projet))
 				elif (i=='P'):
-					P.append(projet)
+					P.append(promo.getProjet(projet))
 				elif (i=='AR'):
-					AR.append(projet)
-				eleve += 1
+					AR.append(promo.getProjet(projet))
+				projet += 1
 
 			#On choisit un eleve au hasard en commencant par les eleves les moins apprecie, puis on l'ajoute dans le classement
 			while (len(T) != 0):
 				i = random.randint(0, len(T)-1)
-				prefProjetTrie.append(T[i])
+				self.prefProjetTrie.append(T[i])
 				T.remove(T[i])
 
 			while (len(B) != 0):
 				i = random.randint(0, len(B)-1)
-				prefProjetTrie.append(B[i])
+				self.prefProjetTrie.append(B[i])
 				B.remove(B[i])
 
 			while (len(AB) != 0):
 				i = random.randint(0, len(AB)-1)
-				prefProjetTrie.append(AB[i])
+				self.prefProjetTrie.append(AB[i])
 				AB.remove(AB[i])
 
 			while (len(P) != 0):
 				i = random.randint(0, len(P)-1)
-				prefProjetTrie.append(P[i])
+				self.prefProjetTrie.append(P[i])
 				P.remove(P[i])
 
 			while (len(AR) != 0):
 				i = random.randint(0, len(AR)-1)
-				prefProjetTrie.append(AR[i])
+				self.prefProjetTrie.append(AR[i])
 				AR.remove(AR[i])
 
 		#return [T, B, AB, P, AR]

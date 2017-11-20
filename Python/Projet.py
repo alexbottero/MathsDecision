@@ -7,5 +7,5 @@ class Projet:
     # Resultat : Retourne un eleve
 		self.numeroProjet = numeroP
 		self.groupe = []
-		return self.numeroProjet
+		
 		
