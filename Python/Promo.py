@@ -123,7 +123,7 @@ class Promo:
 			T.remove(T[i])
 
 
-	def binomeValide(self, e1, e2):
+	def binomeValide(self, e2, e1): #e2 , #e5
 
 		l = e2.prefEleve
 
