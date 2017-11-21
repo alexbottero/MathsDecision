@@ -15,8 +15,6 @@ p.ajouterEleve(3, ['T', 'AB', 'AB', '', 'AB', 'B', 'AB'], ['P', 'B', 'P'])
 p.ajouterEleve(4, ['AB', 'P', 'T', 'B', '', 'AB', 'P'], ['AR', 'AB', 'AR'])
 p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', '', 'P'], ['B', 'T', 'B'])
 p.ajouterEleve(6, ['B', 'B', 'B', 'AB', 'T', 'B', ''], ['AB', 'P', 'AB'])
-#p.ajouterEleve(7, ['AB', 'P', 'P', 'T', 'B', 'B', 'AB', ''], ['T', 'B', 'T'])
-#p.ajouterEleve(8, ['T', 'AB', 'AB', 'AR', 'AB', 'B', 'AB', 'T', ''], ['P', 'B', 'P'])
 
 ################################## AJOUT PROJET ##################################
 ################################## AJOUT PROJET ##################################
