@@ -4,7 +4,7 @@ from Projet import * ;
 
 class Promo:
 
-	def __init__(self, nbE, nbP):
+	def __init__(self, nbE, nbP, cE, cP):
     # creerEleve : int -> int
     # Donnees : numeroE, le numero qui representera l'eleve cree
     # Preconditions : numeroE est compris dans [0, n[               
@@ -20,8 +20,8 @@ class Promo:
 
 		self.classementEleve = []
 		self.eleveRepartis = 0
-		self.critereE = 200
-		self.critereP = 200
+		self.critereE = cE
+		self.critereP = cP
 
 	def ajouterEleve (self, numero, prefE, prefP):
 		e = Eleve(numero, prefE, prefP)

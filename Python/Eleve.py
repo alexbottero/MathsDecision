@@ -13,7 +13,7 @@ class Eleve:
 		self.prefProjet = prefP
 		self.prefProjetTrie = []
 		self.camarades = []
-		self.projet = 'aucun'
+		self.projet = 444
 
 	def majNote (self, note):
 		self.note = note
