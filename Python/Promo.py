@@ -81,18 +81,33 @@ class Promo:
 			note=self.prefEleves[i][eleve.numeroEleve]
 			if(note=='AR'):
 				notes.append(self.prefEleves[i][eleve.numeroEleve])
+		
 		if(len(notes)%2==0):
-			noteM=notes[len(notes)/2]
+			noteM=notes[((len(notes)-1)/2)+1]
 		else:
 			noteM=notes[(len(notes)/2)]
+
+
 
 		if(noteM=='T'):
 			score = 5
 		elif(noteM=='B'):
+			if(notes.count('T')>notes.count('AB')):
+				eleve.mention='+'
+			elif(notes.count('T')<notes.count('AB')):
+				eleve.mention='-'
 			score = 4
 		elif(noteM=='AB'):
+			if(notes.count('B')>notes.count('P')):
+				eleve.mention='+'
+			elif(notes.count('B')<notes.count('P')):
+				eleve.mention='-'
 			score = 3
 		elif(noteM=='P'):
+			if(notes.count('AB')>notes.count('AR')):
+				eleve.mention='+'
+			elif(notes.count('AB')<notes.count('AR')):
+				eleve.mention='-'
 			score = 2
 		elif(noteM=='AR'):
 			score = 1
@@ -119,6 +134,14 @@ class Promo:
 			first_part.append(x[i])
 
 			return first_part + second_part
+
+	def mentionSort(self, x):
+		for i in range(0,len(x)-2):
+			if(x[i].note==x[i+1].note):
+				if((x[i].mention=='+' and not(x[i+1].mention=='+')) or (x[i].mention=='' and x[i+1].mention=='-')):
+					save=x[i]
+					x[i]=x[i+1]
+					x[i+1]=save
 			
 
 	def classerEleve(self):

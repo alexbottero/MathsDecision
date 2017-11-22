@@ -14,6 +14,7 @@ class Eleve:
 		self.prefProjetTrie = []
 		self.camarades = []
 		self.projet = 444
+		self.mention = "nulle"
 
 	def majNote (self, note):
 		self.note = note

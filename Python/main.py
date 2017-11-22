@@ -74,6 +74,7 @@ for i in p.eleves:
 
 #Calcul du classement des elves du moins aime au plus aime
 p.classementEleve = p.quickSort(elevesTemp)
+p.mentionSort(p.classementEleve)
 
 #On autorise 2 camarades maximum pour un eleve 
 nbCamarades = 2
