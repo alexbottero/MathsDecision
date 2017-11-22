@@ -3,24 +3,50 @@ from Eleve import * ;
 from Projet import * ;
 from Promo import * ;
 
-p = Promo(1, 1, 0, 0)
+p = Promo(6, 2, 0, 0)
 
 ################################## AJOUT ELEVES ##################################
 ################################## AJOUT ELEVES ##################################
 
-p.ajouterEleve(0, [''], ['B'])
-#p.ajouterEleve(1, ['B'], ['AB'])
-#p.ajouterEleve(2, ['AB', 'P', ''], ['T'])
-#p.ajouterEleve(3, ['T', 'AB', 'AB', ''], ['P', 'B'])
-#p.ajouterEleve(4, ['AB', 'P', 'T', 'B', ''], ['AR', 'AB'])
-#p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', ''], ['B', 'T'])
-#p.ajouterEleve(6, ['B', 'B', 'B', 'AB', 'T', 'B', ''], ['AB', 'P', 'AB'])
+#p.ajouterEleve(0, [''], ['B'])
+
+#p.ajouterEleve(0, ['', 'AB'], ['B'])
+#p.ajouterEleve(1, ['T', ''], ['AR'])
+
+#p.ajouterEleve(0, ['', 'P', 'AB'], ['T'])
+#p.ajouterEleve(1, ['AB', '', 'T'], ['AB'])
+#p.ajouterEleve(2, ['AB', 'P', ''], ['AR'])
+
+#p.ajouterEleve(0, ['', 'P', 'AB', 'AR'], ['P', 'B'])
+#p.ajouterEleve(1, ['T', '', 'AB', 'B'], ['T', 'B'])
+#p.ajouterEleve(2, ['T', 'AB', '', 'P'], ['P', 'AR'])
+#p.ajouterEleve(3, ['B', 'AB', 'AB', ''], ['AB', 'B'])
+
+#p.ajouterEleve(0, ['', 'P', 'AB', 'AR', 'T'], ['P', 'B'])
+#p.ajouterEleve(1, ['T', '', 'AB', 'B', 'T'], ['T', 'B'])
+#p.ajouterEleve(2, ['T', 'AB', '', 'P', 'AR'], ['P', 'AR'])
+#p.ajouterEleve(3, ['B', 'AB', 'AB', '', 'B'], ['AB', 'B'])
+#p.ajouterEleve(4, ['B', 'AB', 'AB', 'T', ''], ['P', 'AR'])
+
+p.ajouterEleve(0, ['', 'P', 'AB', 'AR', 'T', 'B'], ['P', 'B'])
+p.ajouterEleve(1, ['T', '', 'AB', 'B', 'T', 'AR'], ['T', 'B'])
+p.ajouterEleve(2, ['T', 'AB', '', 'P', 'AR', 'B'], ['P', 'AR'])
+p.ajouterEleve(3, ['B', 'AB', 'AB', '', 'B', 'T'], ['AB', 'B'])
+p.ajouterEleve(4, ['B', 'AB', 'AB', 'T', '', 'AR'], ['P', 'AR'])
+p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', ''], ['B', 'T'])
+
+#p.ajouterEleve(0, ['', 'P', 'AB', 'AR', 'T', 'B'], ['P', 'B', 'T'])
+#p.ajouterEleve(1, ['T', '', 'AB', 'B', 'T', 'AR'], ['T', 'B', 'AB'])
+#p.ajouterEleve(2, ['T', 'AB', '', 'P', 'AR', 'B'], ['P', 'AR', 'B'])
+#p.ajouterEleve(3, ['B', 'AB', 'AB', '', 'B', 'T'], ['AB', 'B', 'T'])
+#p.ajouterEleve(4, ['B', 'AB', 'AB', 'T', '', 'AR'], ['P', 'AR', 'B'])
+#p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', ''], ['B', 'T', 'AB'])
 
 ################################## AJOUT PROJET ##################################
 ################################## AJOUT PROJET ##################################
 
 p.ajouterProjet(0)
-#p.ajouterProjet(1)
+p.ajouterProjet(1)
 #p.ajouterProjet(2)
 
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
@@ -34,7 +60,7 @@ print('\n')
 ################################## INITIALISATION ELEVES ##################################
 
 for i in p.eleves:
-	p.noteMajoritaire(i)
+	p.noteMajoritaire2(i)
 	i.elevePrefere(p) #Trie les eleves prefere de i dans l'ordre (plus prefere -> moins prefere)
 	i.projetPrefere(p) #Trie les projets prefere de i dans l'ordre (plus prefere -> moins prefere)
 

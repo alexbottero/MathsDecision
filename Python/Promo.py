@@ -53,6 +53,54 @@ class Promo:
 
 		return score
 
+	def noteMajoritaire2(self, eleve):
+	# noteMajoritaire : int -> str
+    # Donnees : eleve, le numero de l'eleve a noter
+    # Preconditions :               
+    # Resultat : retourne la note majoritaire de l'eleve
+		notes = []
+
+		for i in range(len(self.prefEleves)):
+			note=self.prefEleves[i][eleve.numeroEleve]
+			if(note=='T'):
+				notes.append(self.prefEleves[i][eleve.numeroEleve])
+		for i in range(len(self.prefEleves)):
+			note=self.prefEleves[i][eleve.numeroEleve]
+			if(note=='B'):
+				notes.append(self.prefEleves[i][eleve.numeroEleve])
+		for i in range(len(self.prefEleves)):
+			note=self.prefEleves[i][eleve.numeroEleve]
+			if(note=='AB'):
+				notes.append(self.prefEleves[i][eleve.numeroEleve])
+		for i in range(len(self.prefEleves)):
+			note=self.prefEleves[i][eleve.numeroEleve]
+			if(note=='P'):
+				notes.append(self.prefEleves[i][eleve.numeroEleve])
+		for i in range(len(self.prefEleves)):
+			note=self.prefEleves[i][eleve.numeroEleve]
+			if(note=='AR'):
+				notes.append(self.prefEleves[i][eleve.numeroEleve])
+		
+		if(len(notes)%2==0):
+			noteM=notes[len(notes)/2]
+		else:
+			noteM=notes[(len(notes)/2)+1]
+
+		if(noteM=='T'):
+			score = 5
+		elif(noteM=='B'):
+			score = 4
+		elif(noteM=='AB'):
+			score = 3
+		elif(noteM=='P'):
+			score = 2
+		elif(noteM=='AR'):
+			score = 1
+
+		eleve.majNote(score)
+
+		return score
+
 
 	def quickSort(self, x):
 
