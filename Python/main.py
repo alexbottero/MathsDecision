@@ -3,25 +3,25 @@ from Eleve import * ;
 from Projet import * ;
 from Promo import * ;
 
-p = Promo(7, 3, 0, 0)
+p = Promo(1, 1, 0, 0)
 
 ################################## AJOUT ELEVES ##################################
 ################################## AJOUT ELEVES ##################################
 
-p.ajouterEleve(0, ['', 'T', 'P', 'P', 'AB', 'T', 'P'], ['B', 'T', 'B'])
-p.ajouterEleve(1, ['B', '', 'B', 'AB', 'T', 'B', 'AB'], ['AB', 'P', 'AB'])
-p.ajouterEleve(2, ['AB', 'P', '', 'T', 'B', 'B', 'AB'], ['T', 'B', 'T'])
-p.ajouterEleve(3, ['T', 'AB', 'AB', '', 'AB', 'B', 'AB'], ['P', 'B', 'P'])
-p.ajouterEleve(4, ['AB', 'P', 'T', 'B', '', 'AB', 'P'], ['AR', 'AB', 'AR'])
-p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', '', 'P'], ['B', 'T', 'B'])
-p.ajouterEleve(6, ['B', 'B', 'B', 'AB', 'T', 'B', ''], ['AB', 'P', 'AB'])
+p.ajouterEleve(0, [''], ['B'])
+#p.ajouterEleve(1, ['B'], ['AB'])
+#p.ajouterEleve(2, ['AB', 'P', ''], ['T'])
+#p.ajouterEleve(3, ['T', 'AB', 'AB', ''], ['P', 'B'])
+#p.ajouterEleve(4, ['AB', 'P', 'T', 'B', ''], ['AR', 'AB'])
+#p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', ''], ['B', 'T'])
+#p.ajouterEleve(6, ['B', 'B', 'B', 'AB', 'T', 'B', ''], ['AB', 'P', 'AB'])
 
 ################################## AJOUT PROJET ##################################
 ################################## AJOUT PROJET ##################################
 
 p.ajouterProjet(0)
-p.ajouterProjet(1)
-p.ajouterProjet(2)
+#p.ajouterProjet(1)
+#p.ajouterProjet(2)
 
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
@@ -55,6 +55,14 @@ end = False
 ################################## DEBUT ALGO ##################################
 ################################## DEBUT ALGO ##################################
 
+if(p.n<4):
+	for z in p.eleves:
+		for j in p.eleves:
+			z.camarades.append(j)
+		z.majProjet(p.projets[0])
+		p.projets[0].groupe.append(z)
+		end=True
+
 #Tant que le critere d'equite n'a pas etait etendu au maximum on cherche
 while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 	
@@ -79,7 +87,7 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 			#S'il reste seulement 4 eleves a repartir on baisse le nombre de camarades a 1 pour former deux binome
 			if(p.n-p.eleveRepartis==4 and p.eleveRepartis%3==0):
 				nbCamarades = 1
-			elif(p.n-p.eleveRepartis==2 and p.eleveRepartis%3==0): #s'il en reste deux : on les met ensembles
+			elif(p.n-p.eleveRepartis==2 and p.eleveRepartis%3==0 and not(p.n%5==0)): #s'il en reste deux : on les met ensembles
 				end = True
 				dernierE = []
 				dernierP = -1
@@ -107,7 +115,7 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 
 
 			#On regarde les eleves preferes inferieur au critere d'equite SI j'ai encore besoin de camarades
-			while (j<p.critereE and not(binome) and len(i.camarades)<nbCamarades and not(end)):
+			while (j<p.critereE-1 and not(binome) and len(i.camarades)<nbCamarades and not(end)):
 
 
 				msg = str(j+1)+" Recherche d'un camarade pour e"+str(i.numeroEleve+1)+" car il a "+str(len(i.camarades))+" camarades"
