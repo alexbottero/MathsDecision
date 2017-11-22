@@ -2,8 +2,18 @@ import random
 from Eleve import * ;
 from Projet import * ;
 from Promo import * ;
+from Parser import *;
 
-p = Promo(6, 2, 0, 0)
+matrice = parseCSV("csv.csv")
+taillePromo = len(matrice)
+
+p = Promo(taillePromo, 1, 0, 0)
+
+num = 0;
+for i in matrice:
+	print("Eleve "+str(num)+" Pref eleve : "+str(i))
+	p.ajouterEleve(num, i,'T')
+	num += 1
 
 ################################## AJOUT ELEVES ##################################
 ################################## AJOUT ELEVES ##################################
@@ -28,12 +38,12 @@ p = Promo(6, 2, 0, 0)
 #p.ajouterEleve(3, ['B', 'AB', 'AB', '', 'B'], ['AB', 'B'])
 #p.ajouterEleve(4, ['B', 'AB', 'AB', 'T', ''], ['P', 'AR'])
 
-p.ajouterEleve(0, ['', 'P', 'AB', 'AR', 'T', 'B'], ['P', 'B'])
-p.ajouterEleve(1, ['T', '', 'AB', 'B', 'T', 'AR'], ['T', 'B'])
-p.ajouterEleve(2, ['T', 'AB', '', 'P', 'AR', 'B'], ['P', 'AR'])
-p.ajouterEleve(3, ['B', 'AB', 'AB', '', 'B', 'T'], ['AB', 'B'])
-p.ajouterEleve(4, ['B', 'AB', 'AB', 'T', '', 'AR'], ['P', 'AR'])
-p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', ''], ['B', 'T'])
+#p.ajouterEleve(0, ['', 'P', 'AB', 'AR', 'T', 'B'], ['P', 'B'])
+#p.ajouterEleve(1, ['T', '', 'AB', 'B', 'T', 'AR'], ['T', 'B'])
+#p.ajouterEleve(2, ['T', 'AB', '', 'P', 'AR', 'B'], ['P', 'AR'])
+#p.ajouterEleve(3, ['B', 'AB', 'AB', '', 'B', 'T'], ['AB', 'B'])
+#p.ajouterEleve(4, ['B', 'AB', 'AB', 'T', '', 'AR'], ['P', 'AR'])
+#p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', ''], ['B', 'T'])
 
 #p.ajouterEleve(0, ['', 'P', 'AB', 'AR', 'T', 'B'], ['P', 'B', 'T'])
 #p.ajouterEleve(1, ['T', '', 'AB', 'B', 'T', 'AR'], ['T', 'B', 'AB'])
@@ -46,15 +56,8 @@ p.ajouterEleve(5, ['T', 'T', 'P', 'P', 'AB', ''], ['B', 'T'])
 ################################## AJOUT PROJET ##################################
 
 p.ajouterProjet(0)
-p.ajouterProjet(1)
+#p.ajouterProjet(1)
 #p.ajouterProjet(2)
-
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-
-for i in p.prefEleves:
-	print(i)
-print('\n')
 
 ################################## INITIALISATION ELEVES ##################################
 ################################## INITIALISATION ELEVES ##################################
@@ -77,6 +80,29 @@ nbCamarades = 2
 
 #Variable qui teste si la repartition est finie
 end = False
+
+################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
+################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
+print("Matrice preference eleves")
+for i in p.prefEleves:
+	print(i)
+print('\n')
+
+################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
+################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
+
+print("Matrice preference projets")
+for i in p.prefProjets:
+	print(i)
+print('\n')
+
+################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
+################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
+
+print("Classement eleves")
+for i in p.classementEleve:
+	print(i.numeroEleve)
+print('\n')
 
 ################################## DEBUT ALGO ##################################
 ################################## DEBUT ALGO ##################################
@@ -141,7 +167,7 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 
 
 			#On regarde les eleves preferes inferieur au critere d'equite SI j'ai encore besoin de camarades
-			while (j<p.critereE-1 and not(binome) and len(i.camarades)<nbCamarades and not(end)):
+			while (j<p.critereE and not(binome) and len(i.camarades)<nbCamarades and not(end)):
 
 
 				msg = str(j+1)+" Recherche d'un camarade pour e"+str(i.numeroEleve+1)+" car il a "+str(len(i.camarades))+" camarades"

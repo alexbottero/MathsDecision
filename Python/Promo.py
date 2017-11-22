@@ -27,6 +27,7 @@ class Promo:
 		e = Eleve(numero, prefE, prefP)
 		self.eleves.append(e)
 		self.prefEleves.append(prefE)
+		self.prefProjets.append(prefP)
 
 	def ajouterProjet (self, numero):
 		p = Projet(numero)
@@ -80,11 +81,10 @@ class Promo:
 			note=self.prefEleves[i][eleve.numeroEleve]
 			if(note=='AR'):
 				notes.append(self.prefEleves[i][eleve.numeroEleve])
-		
 		if(len(notes)%2==0):
 			noteM=notes[len(notes)/2]
 		else:
-			noteM=notes[(len(notes)/2)+1]
+			noteM=notes[(len(notes)/2)]
 
 		if(noteM=='T'):
 			score = 5
