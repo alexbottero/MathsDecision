@@ -45,8 +45,8 @@ for i in p.eleves:
 	elevesTemp.append(i)
 
 #Calcul du classement des elves du moins aime au plus aime
-p.classementEleve = p.quickSort(elevesTemp)
-p.mentionSort(p.classementEleve)
+p.classementEleve = p.mentionSort()
+#p.mentionSort(p.classementEleve)
 
 #On autorise 2 camarades maximum pour un eleve 
 nbCamarades = 1
@@ -117,13 +117,17 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 			d = raw_input("Continuer ? ")
 			detail = not(d=="Non")
 
+		for i in p.eleves:
+			if(len(i.camarades)==0):
+				print(i.nom)
+
 		#On parcourt en entier le classement d'eleve pour affecter le maximum d'eleves
 		for i in p.classementEleve:
 			j = 0 #Variable pour parcourir les eleves preferes de i
 			binome = False
 			
 			#S'il reste seulement 4 eleves a repartir on baisse le nombre de camarades a 1 pour former deux binome
-			if(p.n-p.eleveRepartis<4):
+			if(p.n-1-p.eleveRepartis==3):
 			#s'il en reste deux : on les met ensembles
 				end = True
 				dernierE = []
@@ -153,7 +157,7 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 
 
 			#On regarde les eleves preferes inferieur au critere d'equite SI j'ai encore besoin de camarades
-			while (j<p.critereE and not(binome) and len(i.camarades)<nbCamarades and not(end)):
+			while (j<p.critereE and not(binome) and len(i.camarades)<nbCamarades and not(end) and not(p.n-p.eleveRepartis==3)):
 
 				if detail:
 					msg = str(j+1)+") Recherche d'un camarade pour e"+str(i.numeroEleve+1)+" car il a "+str(len(i.camarades))+" camarades"
@@ -267,7 +271,7 @@ print("REPARTITION\n")
 for i in p.projets:
 	answer = "Projet : p"+str(i.numeroProjet+1)+". Eleve : "
 	for j in i.groupe:
-		answer += "e"+str(j.numeroEleve+1)+". " 
+		answer +=str(j.nom)+". " 
 	print(answer)
 print('\n')
 

@@ -103,19 +103,19 @@ class Promo:
 		nbD = 0
 		nbF = 0
 		if(noteM=='TB'):
-			score = 5
+			score = 6
 		elif(noteM=='B'):
 			nbD = len(debut)-debut.count('B')
 			nbF = len(fin)-fin.count('B')
-			score = 4
+			score = 5
 		elif(noteM=='AB'):
 			nbD = len(debut)-debut.count('AB')
 			nbF = len(fin)-fin.count('AB')
-			score = 3
+			score = 4
 		elif(noteM=='P'):
 			nbD = len(debut)-debut.count('P')
 			nbF = len(fin)-fin.count('P')
-			score = 2
+			score = 3
 		elif(noteM=='I'):
 			nbD = len(debut)-debut.count('I')
 			nbF = len(fin)-fin.count('I')
@@ -151,13 +151,39 @@ class Promo:
 
 			return first_part + second_part
 
-	def mentionSort(self, x):
-		for i in range(0,len(x)-2):
-			if(x[i].note==x[i+1].note):
-				if((x[i].mention=='+' and not(x[i+1].mention=='+')) or (x[i].mention=='nulle' and x[i+1].mention=='-')):
-					save=x[i]
-					x[i]=x[i+1]
-					x[i+1]=save
+	def mentionSort(self):
+		lTemp = []
+		lMoins = []
+		lNeutre = []
+		lPlus = []
+		for i in range(1,7):
+			for j in self.eleves:
+				if j.note==i:
+					if j.mention=='-':
+						lMoins.append(j)
+			for j in self.eleves:
+				if j.note==i:
+					if j.mention=="nulle":
+						lNeutre.append(j)
+			for j in self.eleves:
+				if j.note==i:
+					if j.mention=='+':
+						lPlus.append(j)
+			while (len(lMoins) != 0):
+				z = random.randint(0, len(lMoins)-1)
+				lTemp.append(lMoins[z])
+				lMoins.remove(lMoins[z])
+			while (len(lNeutre) != 0):
+				z = random.randint(0, len(lNeutre)-1)
+				lTemp.append(lNeutre[z])
+				lNeutre.remove(lNeutre[z])
+			while (len(lPlus) != 0):
+				z = random.randint(0, len(lPlus)-1)
+				lTemp.append(lPlus[z])
+				lPlus.remove(lPlus[z])
+
+		return lTemp
+
 			
 
 	def classerEleve(self):
