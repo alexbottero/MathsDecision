@@ -23,8 +23,8 @@ class Promo:
 		self.critereE = cE
 		self.critereP = cP
 
-	def ajouterEleve (self, numero, prefE, prefP):
-		e = Eleve(numero, prefE, prefP)
+	def ajouterEleve (self, numero, prefE, prefP, nom):
+		e = Eleve(numero, prefE, prefP, nom)
 		self.eleves.append(e)
 		self.prefEleves.append(prefE)
 		self.prefProjets.append(prefP)
@@ -43,13 +43,14 @@ class Promo:
 		for i in range(len(self.prefEleves)):
 			notes.append(self.prefEleves[i][eleve.numeroEleve])
 		
-		T = notes.count('T')
+		T = notes.count('TB')
 		B = notes.count('B')
 		AB = notes.count('AB')
 		P = notes.count('P')
+		I = notes.count('I')
 		AR = notes.count('AR')
 
-		score = AR + P*2 + AB*3 + B*4 + T*5
+		score = AR + I*2 + P*3 + AB*4 + B*5 + T*6
 		eleve.majNote(score)
 
 		return score
@@ -63,7 +64,7 @@ class Promo:
 
 		for i in range(len(self.prefEleves)):
 			note=self.prefEleves[i][eleve.numeroEleve]
-			if(note=='T'):
+			if(note=='TB'):
 				notes.append(self.prefEleves[i][eleve.numeroEleve])
 		for i in range(len(self.prefEleves)):
 			note=self.prefEleves[i][eleve.numeroEleve]
@@ -79,38 +80,53 @@ class Promo:
 				notes.append(self.prefEleves[i][eleve.numeroEleve])
 		for i in range(len(self.prefEleves)):
 			note=self.prefEleves[i][eleve.numeroEleve]
+			if(note=='I'):
+				notes.append(self.prefEleves[i][eleve.numeroEleve])
+		for i in range(len(self.prefEleves)):
+			note=self.prefEleves[i][eleve.numeroEleve]
 			if(note=='AR'):
 				notes.append(self.prefEleves[i][eleve.numeroEleve])
 		
+		debut=[]
+		fin=[]
+
 		if(len(notes)%2==0):
-			noteM=notes[((len(notes)-1)/2)+1]
-		else:
 			noteM=notes[(len(notes)/2)]
+			debut=notes[0:(len(notes))/2]
+			fin=notes[(len(notes)/2)+1: len(notes)]
 
+		else:
+			noteM=notes[(len(notes)/2)+1]
+			debut=notes[0:(len(notes)-1)/2]
+			fin=notes[(len(notes)+1)/2: len(notes)]
 
-
-		if(noteM=='T'):
+		nbD = 0
+		nbF = 0
+		if(noteM=='TB'):
 			score = 5
 		elif(noteM=='B'):
-			if(notes.count('T')>notes.count('AB')):
-				eleve.mention='+'
-			elif(notes.count('T')<notes.count('AB')):
-				eleve.mention='-'
+			nbD = len(debut)-debut.count('B')
+			nbF = len(fin)-fin.count('B')
 			score = 4
 		elif(noteM=='AB'):
-			if(notes.count('B')>notes.count('P')):
-				eleve.mention='+'
-			elif(notes.count('B')<notes.count('P')):
-				eleve.mention='-'
+			nbD = len(debut)-debut.count('AB')
+			nbF = len(fin)-fin.count('AB')
 			score = 3
 		elif(noteM=='P'):
-			if(notes.count('AB')>notes.count('AR')):
-				eleve.mention='+'
-			elif(notes.count('AB')<notes.count('AR')):
-				eleve.mention='-'
+			nbD = len(debut)-debut.count('P')
+			nbF = len(fin)-fin.count('P')
+			score = 2
+		elif(noteM=='I'):
+			nbD = len(debut)-debut.count('I')
+			nbF = len(fin)-fin.count('I')
 			score = 2
 		elif(noteM=='AR'):
 			score = 1
+
+		if(nbD>nbF):
+				eleve.mention='+'
+		elif(nbD<nbF):
+				eleve.mention='-'
 
 		eleve.majNote(score)
 
@@ -138,7 +154,7 @@ class Promo:
 	def mentionSort(self, x):
 		for i in range(0,len(x)-2):
 			if(x[i].note==x[i+1].note):
-				if((x[i].mention=='+' and not(x[i+1].mention=='+')) or (x[i].mention=='' and x[i+1].mention=='-')):
+				if((x[i].mention=='+' and not(x[i+1].mention=='+')) or (x[i].mention=='nulle' and x[i+1].mention=='-')):
 					save=x[i]
 					x[i]=x[i+1]
 					x[i+1]=save
@@ -150,12 +166,13 @@ class Promo:
 		B = []
 		AB = []
 		P = []
+		I = []
 		AR = []
 
 		indice = 0
 		#Pour chaque eleve on l'ajoute dans le tableau qui lui correspond
 		for i in self.eleves:
-			if (self.noteMajoritaire(i)=='T'):
+			if (self.noteMajoritaire(i)=='TB'):
 				T.append(self.eleves[indice])
 			elif (self.noteMajoritaire(i)=='B'):
 				B.append(self.eleves[indice])
@@ -163,6 +180,8 @@ class Promo:
 				AB.append(self.eleves[indice])
 			elif (self.noteMajoritaire(i)=='P'):
 				P.append(self.eleves[indice])
+			elif (self.noteMajoritaire(i)=='I'):
+				I.append(self.eleves[indice])
 			elif (self.noteMajoritaire(i)=='AR'):
 				AR.append(self.eleves[indice])
 			indice += 1
@@ -172,6 +191,11 @@ class Promo:
 			i = random.randint(0, len(AR)-1)
 			self.classementEleve.append(AR[i])
 			AR.remove(AR[i])
+
+		while (len(I) != 0):
+			i = random.randint(0, len(I)-1)
+			self.classementEleve.append(I[i])
+			I.remove(I[i])
 
 		while (len(P) != 0):
 			i = random.randint(0, len(P)-1)
@@ -201,10 +225,10 @@ class Promo:
 		nb = 0
 		resultat = False
 
-		if (l[e1.numeroEleve] == 'T'):
+		if (l[e1.numeroEleve] == 'TB'):
 			resultat = True
 		else:
-			nb += l.count('T')
+			nb += l.count('TB')
 		
 		if (nb < self.critereE and l[e1.numeroEleve] == 'B'):
 			resultat = True		
@@ -221,6 +245,11 @@ class Promo:
 		else:
 			nb += l.count('P')
 
+		if(nb < self.critereE and l[e1.numeroEleve] == 'I'):
+			resultat = True
+		else:
+			nb += l.count('I')
+
 		if(nb < self.critereE and l[e1.numeroEleve] == 'AR'):
 			resultat = True
 		else:
@@ -236,10 +265,10 @@ class Promo:
 		nb = 0
 		resultat = False
 
-		if (l[p.numeroProjet] == 'T'):
+		if (l[p.numeroProjet] == 'TB'):
 			resultat = True
 		else:
-			nb += l.count('T')
+			nb += l.count('TB')
 		
 		if (nb < self.critereP and l[p.numeroProjet] == 'B'):
 			resultat = True		
@@ -255,6 +284,11 @@ class Promo:
 			resultat = True
 		else:
 			nb += l.count('P')
+
+		if(nb < self.critereP and l[p.numeroProjet] == 'I'):
+			resultat = True
+		else:
+			nb += l.count('I')
 
 		if(nb < self.critereP and l[p.numeroProjet] == 'AR'):
 			resultat = True

@@ -2,12 +2,13 @@ import random
 
 class Eleve:
 
-	def __init__(self, numeroE, prefE, prefP):
+	def __init__(self, numeroE, prefE, prefP, nom):
 	# creerEleve : int -> int
 	# Donnees : numeroE, le numero qui representera l'eleve cree
 	# Preconditions : numeroE est compris dans [0, n[               
 	# Resultat : Retourne un eleve
 		self.numeroEleve = numeroE
+		self.nom = nom
 		self.prefEleve = prefE
 		self.prefEleveTrie = []
 		self.prefProjet = prefP
@@ -35,11 +36,12 @@ class Eleve:
 			B = []
 			AB = []
 			P = []
+			I = []
 			AR = []
 
 			eleve = 0
 			for i in self.prefEleve:
-				if (i=='T'):
+				if (i=='TB'):
 					T.append(promo.getEleve(eleve))
 				elif (i=='B'):
 					B.append(promo.getEleve(eleve))
@@ -47,6 +49,8 @@ class Eleve:
 					AB.append(promo.getEleve(eleve))
 				elif (i=='P'):
 					P.append(promo.getEleve(eleve))
+				elif (i=='I'):
+					I.append(promo.getEleve(eleve))
 				elif (i=='AR'):
 					AR.append(promo.getEleve(eleve))
 				eleve += 1
@@ -72,6 +76,11 @@ class Eleve:
 				self.prefEleveTrie.append(P[i])
 				P.remove(P[i])
 
+			while (len(I) != 0):
+				i = random.randint(0, len(I)-1)
+				self.prefEleveTrie.append(I[i])
+				I.remove(I[i])
+
 			while (len(AR) != 0):
 				i = random.randint(0, len(AR)-1)
 				self.prefEleveTrie.append(AR[i])
@@ -91,11 +100,12 @@ class Eleve:
 			B = []
 			AB = []
 			P = []
+			I = []
 			AR = []
 
 			projet = 0
 			for i in self.prefProjet:
-				if (i=='T'):
+				if (i=='TB'):
 					T.append(promo.getProjet(projet))
 				elif (i=='B'):
 					B.append(promo.getProjet(projet))
@@ -103,6 +113,8 @@ class Eleve:
 					AB.append(promo.getProjet(projet))
 				elif (i=='P'):
 					P.append(promo.getProjet(projet))
+				elif (i=='I'):
+					I.append(promo.getProjet(projet))
 				elif (i=='AR'):
 					AR.append(promo.getProjet(projet))
 				projet += 1
@@ -127,6 +139,11 @@ class Eleve:
 				i = random.randint(0, len(P)-1)
 				self.prefProjetTrie.append(P[i])
 				P.remove(P[i])
+
+			while (len(I) != 0):
+				i = random.randint(0, len(I)-1)
+				self.prefProjetTrie.append(I[i])
+				I.remove(I[i])
 
 			while (len(AR) != 0):
 				i = random.randint(0, len(AR)-1)
