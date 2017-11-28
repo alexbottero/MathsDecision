@@ -332,3 +332,12 @@ class Promo:
 
 		projet = self.projets[i]
 		return projet
+
+	def calculNbTrinome (self):
+		print "Taille promo = ", self.n
+		if (self.n<=54 and self.n>=36):
+			trinome = self.n%18
+		elif (self.n<36):
+			trinome = self.n%2
+		print "il faut ", trinome, "trinome"
+		return trinome

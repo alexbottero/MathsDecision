@@ -6,11 +6,11 @@ from Promo import * ;
 from parser import *;
 
 matrice = parseCSV("csv.csv")
-taillePromo = len(matrice)
 
 matrice[0].remove("Nom")
+taillePromo = len(matrice[0])
 
-pTest = ['TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB']
+pTest = ['TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB']
 
 p = Promo(taillePromo, len(pTest), 0, 0)
 
@@ -49,7 +49,7 @@ p.classementEleve = p.mentionSort()
 #p.mentionSort(p.classementEleve)
 
 #On autorise 2 camarades maximum pour un eleve 
-nbCamarades = 1
+nbCamarades = 2
 
 #Variable qui teste si la repartition est finie
 end = False
@@ -79,6 +79,12 @@ for i in p.classementEleve:
 	c += 1
 print('\n')
 
+################################## Nb binome ##################################
+################################## Nb binome ##################################
+
+nbTrinome = 0
+nbTrinomeMax = p.calculNbTrinome()
+
 ################################## DEBUT ALGO ##################################
 ################################## DEBUT ALGO ##################################
 
@@ -107,7 +113,7 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 
 	if(not(end)): 
 		#On augmente le critere de 1 s'il n'a pas atteint le max
-		if(p.critereE<p.n-2):
+		if(p.critereE<p.n-1):
 			p.critereE+=1;
 		if(p.critereP<p.p-1):
 			p.critereP+=1;
@@ -125,9 +131,12 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 		for i in p.classementEleve:
 			j = 0 #Variable pour parcourir les eleves preferes de i
 			binome = False
+
+			if(nbTrinome == nbTrinomeMax):
+				nbCamarades = 1
 			
 			#S'il reste seulement 4 eleves a repartir on baisse le nombre de camarades a 1 pour former deux binome
-			if(p.n-1-p.eleveRepartis==3):
+			if(p.n-p.eleveRepartis==3 and nbTrinome<nbTrinomeMax):
 			#s'il en reste deux : on les met ensembles
 				end = True
 				dernierE = []
@@ -140,7 +149,6 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 				for y in p.projets:
 					if(len(y.groupe)==0):
 						dernierP=y
-				print(dernierE)
 				dernierE[0].camarades.append(dernierE[1])
 				dernierE[0].camarades.append(dernierE[2])
 				dernierE[1].camarades.append(dernierE[0])
@@ -158,12 +166,14 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 				if detail:
 					msg = "Creation dernier groupe : e"+str(dernierE[0].numeroEleve+1)+", e"+str(dernierE[1].numeroEleve+1)+", p"+str(dernierP.numeroProjet+1)+"\n"
 					print(msg)
+					d = raw_input("Continuer ? ")
+					detail = not(d=="Non")
 
 
 
 
 			#On regarde les eleves preferes inferieur au critere d'equite SI j'ai encore besoin de camarades
-			while (j<p.critereE and not(binome) and len(i.camarades)<nbCamarades and not(end) and not(p.n-p.eleveRepartis==3)):
+			while (j<p.critereE and not(binome) and len(i.camarades)<nbCamarades and not(end)):
 
 				if detail:
 					msg = str(j+1)+") Recherche d'un camarade pour e"+str(i.numeroEleve+1)+" car il a "+str(len(i.camarades))+" camarades"
@@ -180,15 +190,39 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 					detail = not(d=="Non")
 				
 				#Si le nombre de camarades de l'eleve prefere est nul
-				if(len(e2.camarades)<nbCamarades):
+				if(len(e2.camarades)<nbCamarades and not(i.camarades.count(e2)>0) and not(len(e2.camarades)==1 and len(i.camarades)==1)):
 					if detail:
 						msg = "On regarde e"+str(e2.numeroEleve+1)+" qui a "+str(len(e2.camarades))+" camarades"
 						print(msg)
 						d = raw_input("Continuer ? ")
 						detail = not(d=="Non")
 
+					#Si l'un des deux a deja des camarades, on verifie que tous les camarades sont compatibles avec l'eleve prefere
+					if(not(nbCamarades==1)):
+						if(len(i.camarades)==0):
+							eTest = e2.camarades
+							iTest = True
+						elif (len(e2.camarades)==0):
+							eTest = i.camarades
+							iTest = False
+						bValide = True
+						for e in eTest:
+							if (iTest):
+								bValide = p.binomeValide(e, i) and p.binomeValide(i,e)
+								if detail:
+									msg = "Test du binome : "+str(p.binomeValide(e, i))+" avec e"+str(i.numeroEleve+1)+" et e"+str(e.numeroEleve+1)
+									print(msg)
+							else:
+								bValide = p.binomeValide(e, e2) and p.binomeValide(e2, e)
+								if detail:
+									msg = "Test du binome : "+str(p.binomeValide(e, e2))+" avec e"+str(e2.numeroEleve+1)+" et e"+str(e.numeroEleve+1)
+									print(msg)
+					else:
+						if(len(i.camarades)==0 and len(e2.camarades)==0):
+							bValide = True
+
 					#Si les camarades ET l'eleve i sont valide, on continue
-					if (p.binomeValide(e2, i)):
+					if (p.binomeValide(e2, i) and bValide):
 						if detail:
 							msg = "Test du binome : "+str(p.binomeValide(e2, i))+" avec e"+str(i.numeroEleve+1)+" et e"+str(e2.numeroEleve+1)
 							print(msg)
@@ -198,23 +232,37 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 						k = 0 #Variable pour se balader dans les projet
 						projet = False
 
-						#Si aucun n'a de camarades => aucun n'a de projet, on recherche un projet commun valide
-						while(k<p.critereP and projet==False):
-							pr = i.prefProjetTrie[k] #on recupere projet prefere i
-							if detail:
-								print("p"+str(pr.numeroProjet+1)+" est le projet numero "+str(k+1)+" de l'eleve e"+str(i.numeroEleve+1))
-								d = raw_input("Continuer ? ")
-								detail = not(d=="Non")
-							if (len(pr.groupe) == 0): #S'il n'a personne d'affecter on regarde s'i lest valide
-								projet = p.projetValide(e2, pr)
+						if(len(i.camarades)==0 and len(e2.camarades)==0):
+							#Si aucun n'a de camarades => aucun n'a de projet, on recherche un projet commun valide
+							while(k<p.critereP and projet==False):
+								pr = i.prefProjetTrie[k] #on recupere projet prefere i
 								if detail:
-									msg = "Etude du projet p"+str(pr.numeroProjet+1)+" pour e"+str(e2.numeroEleve+1)+" : "+str(projet)
-									print(msg)
 									print("p"+str(pr.numeroProjet+1)+" est le projet numero "+str(k+1)+" de l'eleve e"+str(i.numeroEleve+1))
 									d = raw_input("Continuer ? ")
 									detail = not(d=="Non")
+								if (len(pr.groupe) == 0): #S'il n'a personne d'affecter on regarde s'i lest valide
+									projet = p.projetValide(e2, pr)
+									if detail:
+										msg = "Etude du projet p"+str(pr.numeroProjet+1)+" pour e"+str(e2.numeroEleve+1)+" : "+str(projet)
+										print(msg)
+										print("p"+str(pr.numeroProjet+1)+" est le projet numero "+str(k+1)+" de l'eleve e"+str(i.numeroEleve+1))
+										d = raw_input("Continuer ? ")
+										detail = not(d=="Non")
 
-							k += 1						
+								k += 1
+						elif (len(i.camarades)==1): #Si i a deja un projet, on regarde s'il plait a l'eleve prefere
+							pr = i.projet
+							projet = p.projetValide(e2, pr)
+							if detail:
+								msg = "Etude du projet p"+str(pr.numeroProjet+1)+" pour e"+str(e2.numeroEleve+1)+" : "+str(projet)
+								print(msg)
+
+						elif (len(e2.camarades)==1): #Si l'eleve prefere a deja un projet, on regarde s'il plait a l'eleve i
+							pr = e2.projet
+							projet = p.projetValide(i, pr)
+							if detail:
+								msg = "Etude du projet p"+str(pr.numeroProjet+1)+" pour e"+str(i.numeroEleve+1)+" : "+str(projet)
+								print(msg)						
 					else:
 						if detail:
 							msg = "Test du binome : "+str(p.binomeValide(e2, i))+" avec e"+str(i.numeroEleve+1)+" et e"+str(e2.numeroEleve+1)
@@ -235,18 +283,44 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 					e2.majProjet(pr)
 
 					#Si on creer un binome alors on sauvegarde le binome dans le projet
-					
-					if detail:
-						msg = "Creation groupe : e"+str(i.numeroEleve+1)+", e"+str(e2.numeroEleve+1)+", p"+str(pr.numeroProjet+1)
-						print(msg)
-						
-						d = raw_input("Continuer ? ")
-						detail = not(d=="Non")
-					pr.groupe.append(i)
-					pr.groupe.append(e2)
+					if (len(i.camarades)==0 and len(e2.camarades)==0):
+						p.eleveRepartis += 2
 
-					#Si on devait affecter des binome vers la fin, alors on considere les deux eleves repartis
-					p.eleveRepartis += 2
+						if detail:
+							msg = "Creation groupe : e"+str(i.numeroEleve+1)+", e"+str(e2.numeroEleve+1)+", p"+str(pr.numeroProjet+1)
+							print(msg)						
+							d = raw_input("Continuer ? ")
+							detail = not(d=="Non")
+						pr.groupe.append(i)
+						pr.groupe.append(e2)
+
+					#Si i avait un camarades, on sauvegarde juste l'eleve prefere dans le projet
+					elif (len(i.camarades)==1):
+						if detail:
+							msg = "Creation trinome : e"+str(i.numeroEleve+1)+", e"+str(e2.numeroEleve+1)+", e"+str(i.camarades[0].numeroEleve+1)+", p"+str(pr.numeroProjet+1)
+						
+							d = raw_input("Continuer ? ")
+							detail = not(d=="Non")
+				
+						i.camarades[0].camarades.append(e2)
+						e2.camarades.append(i.camarades[0])						
+						pr.groupe.append(e2)
+						p.eleveRepartis += 1
+						nbTrinome += 1
+
+					#Si l'eleve prefere avait un cmarades, on sauvegarde juste i dans le projet
+					elif (len(e2.camarades)==1):
+						if detail:
+							msg = "Creation trinome : e"+str(i.numeroEleve+1)+", e"+str(e2.numeroEleve+1)+", e"+str(e2.camarades[0].numeroEleve+1)+", p"+str(pr.numeroProjet+1)
+							print(msg)
+							d = raw_input("Continuer ? ")
+							detail = not(d=="Non")
+						e2.camarades[0].camarades.append(i)
+						i.camarades.append(e2.camarades[0])
+						pr.groupe.append(i)
+						p.eleveRepartis += 1
+						nbTrinome += 1
+
 					#on met a jour les camarades
 					i.camarades.append(e2)
 					e2.camarades.append(i)
@@ -262,8 +336,6 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 					j += 1						
 
 				end = p.eleveRepartis==p.n
-				print(p.eleveRepartis)
-				print(p.n)
 				if detail:
 					print("\n")
 		
