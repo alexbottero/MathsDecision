@@ -7,7 +7,7 @@ import sys
 		TB,-1,AR
 		TB,AB,-1
 	Les valeurs du fichier sont :
-		Tres bien = TB
+		Tres bien = TBkoko
 		...
 		A rejeter = AR
 		Diagonale = -1

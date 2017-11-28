@@ -142,12 +142,18 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 						dernierP=y
 				print(dernierE)
 				dernierE[0].camarades.append(dernierE[1])
+				dernierE[0].camarades.append(dernierE[2])
 				dernierE[1].camarades.append(dernierE[0])
+				dernierE[1].camarades.append(dernierE[2])
+				dernierE[2].camarades.append(dernierE[0])
+				dernierE[2].camarades.append(dernierE[1])
 				dernierE[0].majProjet(dernierP)
 				dernierE[1].majProjet(dernierP)
+				dernierE[2].majProjet(dernierP)
 				dernierP.groupe.append(dernierE[0])
 				dernierP.groupe.append(dernierE[1])
-				p.eleveRepartis+=2
+				dernierP.groupe.append(dernierE[2])
+				p.eleveRepartis+=3
 
 				if detail:
 					msg = "Creation dernier groupe : e"+str(dernierE[0].numeroEleve+1)+", e"+str(dernierE[1].numeroEleve+1)+", p"+str(dernierP.numeroProjet+1)+"\n"
