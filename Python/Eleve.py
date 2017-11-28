@@ -151,3 +151,21 @@ class Eleve:
 				AR.remove(AR[i])
 
 		#return [T, B, AB, P, AR]
+
+	def elevePrefereRandom (self, k):
+		notation = self.prefEleve[self.prefEleveTrie[k].numeroEleve]
+		lTemp = []
+		i=0
+		e = self.prefEleveTrie[i]
+		while (self.prefEleve[e.numeroEleve]!=notation):
+			lTemp.append(e)
+			i += 1
+			e = self.prefEleveTrie[i]
+		while (self.prefEleve[e.numeroEleve]==notation):
+			lTemp.append(e)
+			i += 1
+			e = self.prefEleveTrie[i]
+
+		z = random.randint(0, len(lTemp)-1)
+		return lTemp[z]
+		

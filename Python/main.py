@@ -17,11 +17,12 @@ p = Promo(taillePromo, len(pTest), 0, 0)
 num = 0;
 
 
-
+print "Liste des eleves"
 for i in matrice[0]:	
 	print("Eleve "+str(num)+" / Nom : "+str(i))#+" / Pref eleve : "+str(matrice[num+1][1:48]))
 	p.ajouterEleve(num, matrice[num+1][1:48],pTest, i)
 	num += 1
+print "\n"
 
 
 ################################## AJOUT PROJET ##################################
@@ -36,8 +37,6 @@ for i in p.eleves:
 	p.noteMajoritaire2(i)
 	i.elevePrefere(p) #Trie les eleves prefere de i dans l'ordre (plus prefere -> moins prefere)
 	i.projetPrefere(p) #Trie les projets prefere de i dans l'ordre (plus prefere -> moins prefere)
-	print("preffff e : ", i.prefEleve)
-	print("prefffffe trie : ", len(i.prefEleveTrie))
 
 #Copie de la liste d'eleve dans une liste temporaire (car sinon quicksort modifie la liste)
 elevesTemp = []
@@ -57,17 +56,23 @@ end = False
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
 print("Matrice preference eleves")
-#for i in p.prefEleves:
-	#print(i)
-#print('\n')
+d = raw_input("Afficher (Oui/Non)? ")
+detail = (d=="Oui")
+if detail:
+	for i in p.prefEleves:
+		print(i)
+	print('\n')
 
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
 
 print("Matrice preference projets")
-#for i in p.prefProjets:
-	#print(i)
-print('\n')
+d = raw_input("Afficher (Oui/Non)? ")
+detail = (d=="Oui")
+if detail:
+	for i in p.prefProjets:
+		print(i)
+	print('\n')
 
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
 ################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
@@ -104,12 +109,8 @@ debut=time.time()
 
 #Tant que le critere d'equite n'a pas etait etendu au maximum on cherche
 while((p.critereE<p.n or p.critereP<p.p) and not(end)):
-	if detail:
-		print("Fin repartition ? "+str(end)+"\n")
+
 	end = p.eleveRepartis==p.n #Si on a repartie tout les eleves alors : fin
-	
-	print("Critere eleve = ", p.critereE)
-	print("Critere projet = ", p.critereP)
 
 	if(not(end)): 
 		#On augmente le critere de 1 s'il n'a pas atteint le max
@@ -123,9 +124,9 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 			d = raw_input("Continuer ? ")
 			detail = not(d=="Non")
 
-		for i in p.eleves:
-			if(len(i.camarades)==0):
-				print(i.nom)
+		#for i in p.eleves:
+			#if(len(i.camarades)==0):
+				#print(i.nom)
 
 		#On parcourt en entier le classement d'eleve pour affecter le maximum d'eleves
 		for i in p.classementEleve:
@@ -182,7 +183,7 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 					detail = not(d=="Non")
 
 				#Recuperation du jieme eleve prefere de i
-				e2 = i.prefEleveTrie[j]
+				e2 = i.elevePrefereRandom(j)
 				projet = False
 				if detail:
 					print("e"+str(e2.numeroEleve+1)+" est l'eleve prefere numero "+str(j+1)+" de e"+str(i.numeroEleve+1))
@@ -245,7 +246,6 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 									if detail:
 										msg = "Etude du projet p"+str(pr.numeroProjet+1)+" pour e"+str(e2.numeroEleve+1)+" : "+str(projet)
 										print(msg)
-										print("p"+str(pr.numeroProjet+1)+" est le projet numero "+str(k+1)+" de l'eleve e"+str(i.numeroEleve+1))
 										d = raw_input("Continuer ? ")
 										detail = not(d=="Non")
 
@@ -336,8 +336,14 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 					j += 1						
 
 				end = p.eleveRepartis==p.n
+				
 				if detail:
 					print("\n")
+	if detail:
+		print("Fin repartition ? "+str(end)+"\n")
+		d = raw_input("Continuer ? ")
+		detail = not(d=="Non")
+
 		
 
 ################################## FIN ALGO ##################################
