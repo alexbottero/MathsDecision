@@ -5,7 +5,7 @@ from Projet import * ;
 from Promo import * ;
 from parser import *;
 
-matrice = parseCSV("csv.csv")
+matrice = parseCSV("PREF.csv")
 
 matrice[0].remove("Nom")
 taillePromo = len(matrice[0])
@@ -114,12 +114,15 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 
 	if(not(end)): 
 		#On augmente le critere de 1 s'il n'a pas atteint le max
-		if(p.critereE<p.n-1):
+		if(p.critereE<p.n-2):
 			p.critereE+=1;
 		if(p.critereP<p.p-1):
 			p.critereP+=1;
 		if detail:
+			print "\n"
 			print("On va parcourir tout le classement des eleves, on essaye de trouver des binome (b1, b2) tel que : b1 appartient au "+str(p.critereE)+" premiers eleves les plus preferes de b2 (et vice versa)")
+			if(nbTrinome<nbTrinomeMax):
+				print "De plus, nous avons forme que ", nbTrinome, " trinomes sur ", nbTrinomeMax, " demandes. On va alors aussi essayez de former des trinome (t1, t2, t3), tel que : t1 appartient au ", p.critereE, " premiers eleves preferes de t2 et t3 (et vice versa pour t2 et t3)"
 			print("Si on trouver deux eleves compatible, on chercher un projet tel que : projet appartient au "+str(p.critereP)+" premiers projets preferes de b1 et b2\n")
 			d = raw_input("Continuer ? ")
 			detail = not(d=="Non")
@@ -137,9 +140,9 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 				nbCamarades = 1
 			
 			#S'il reste seulement 4 eleves a repartir on baisse le nombre de camarades a 1 pour former deux binome
-			if(p.n-p.eleveRepartis==3 and nbTrinome<nbTrinomeMax):
+			if(p.n-p.eleveRepartis==1 and nbTrinome<nbTrinomeMax):
 			#s'il en reste deux : on les met ensembles
-				end = True
+				
 				dernierE = []
 				dernierP = -1
 
@@ -147,22 +150,30 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 				for x in p.eleves:
 					if(len(x.camarades)==0):
 						dernierE.append(x)
-				for y in p.projets:
-					if(len(y.groupe)==0):
-						dernierP=y
-				dernierE[0].camarades.append(dernierE[1])
-				dernierE[0].camarades.append(dernierE[2])
-				dernierE[1].camarades.append(dernierE[0])
-				dernierE[1].camarades.append(dernierE[2])
-				dernierE[2].camarades.append(dernierE[0])
-				dernierE[2].camarades.append(dernierE[1])
-				dernierE[0].majProjet(dernierP)
-				dernierE[1].majProjet(dernierP)
-				dernierE[2].majProjet(dernierP)
-				dernierP.groupe.append(dernierE[0])
-				dernierP.groupe.append(dernierE[1])
-				dernierP.groupe.append(dernierE[2])
-				p.eleveRepartis+=3
+				#for y in p.projets:
+				#	if(len(y.groupe)==0):
+				#		dernierP=y
+				if detail:
+					print " Dernier Eleve trouves : ",dernierE[0].nom
+					d = raw_input("Continuer ? ")
+					detail = not(d=="Non")
+				while not(end) and p.critereE<p.n:
+					for u in range(0,len(dernierE[0].prefEleveTrie)):
+						y = dernierE[0].elevePrefereRandom(u)
+						if(p.binomeValide(y,dernierE[0]) and len(y.camarades)<2 and len(dernierE[0].camarades)<2 and not(end)):
+							for o in y.camarades:
+								valid = p.binomeValide(o,dernierE[0])
+							if valid:
+								dernierE[0].camarades.append(y)
+								y.camarades.append(dernierE[0])
+								dernierE[0].majProjet(y.projet)
+								y.projet.groupe.append(dernierE[0])
+								end = True
+					p.critereE+=1
+					
+
+
+					p.eleveRepartis+=1
 
 				if detail:
 					msg = "Creation dernier groupe : e"+str(dernierE[0].numeroEleve+1)+", e"+str(dernierE[1].numeroEleve+1)+", p"+str(dernierP.numeroProjet+1)+"\n"
@@ -364,3 +375,16 @@ temps = fin-debut
 print("La repartition a duree : "+str(temps)+" secondes.\n")
 
 
+###################### Satisfaction ######################
+###################### Satisfaction ######################
+
+eleveHeureux = 0
+p.critereE = 1
+for i in p.eleves:
+	for j in i.camarades:
+		heureux = p.binomeValide(i,j)
+	if heureux:
+		eleveHeureux += 1
+ratio = (eleveHeureux*100/p.n)
+print "Nombre eleves satisfaits : ", eleveHeureux, " sur ", p.n, " elves."
+print "Pourcentage de satisfaction : ", ratio, "%."

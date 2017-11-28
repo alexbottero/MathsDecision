@@ -157,14 +157,16 @@ class Eleve:
 		lTemp = []
 		i=0
 		e = self.prefEleveTrie[i]
-		while (self.prefEleve[e.numeroEleve]!=notation):
+		while (self.prefEleve[e.numeroEleve]!=notation and i<len(self.prefEleveTrie)):
 			lTemp.append(e)
 			i += 1
-			e = self.prefEleveTrie[i]
-		while (self.prefEleve[e.numeroEleve]==notation):
+			if (i<len(self.prefEleveTrie)):
+				e = self.prefEleveTrie[i]
+		while (self.prefEleve[e.numeroEleve]==notation and i<len(self.prefEleveTrie)):
 			lTemp.append(e)
 			i += 1
-			e = self.prefEleveTrie[i]
+			if(i<len(self.prefEleveTrie)):
+				e = self.prefEleveTrie[i]
 
 		z = random.randint(0, len(lTemp)-1)
 		return lTemp[z]
