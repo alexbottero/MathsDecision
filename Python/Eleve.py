@@ -17,8 +17,10 @@ class Eleve:
 		self.projet = 444
 		self.mention = "nulle"
 
-	def majNote (self, note):
+	def majNote (self, note, nbMentionMoins, nbMentionPlus):
 		self.note = note
+		self.nbMentionMoins = nbMentionMoins
+		self.nbMentionPlus = nbMentionPlus
 
 	def majProjet (self, projet):
 		self.projet = projet

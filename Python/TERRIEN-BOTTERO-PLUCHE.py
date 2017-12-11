@@ -1,94 +1,82 @@
 import random
 import time
+import sys
 from Eleve import * ;
 from Projet import * ;
 from Promo import * ;
-from parser import *;
+from Parser import *;
+from Affichage import *;
 
-matrice = parseCSV("PREF.csv")
+print "\nDEBUT DU PROGRAMME\n"
 
+# Recuperation du csv entre en ligne de commande
+print "PARSER CSV"
+csv = str(sys.argv[1])
+matrice = parseCSV(csv)
 matrice[0].remove("Nom")
-taillePromo = len(matrice[0])
+print "PARSER CSV completed\n"
 
-pTest = ['TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB']
+prefProjetTB = ['TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB', 'TB']
 
-p = Promo(taillePromo, len(pTest), 0, 0)
+print "INITIALISATION DONNEES"
+# Initialisation des donnees de la promo
+nbEleves = len(matrice[0])
+nbProjets = len(prefProjetTB)
+critereEleveInitial = 0
+citereProjetInitial = 0
 
-num = 0;
+# Creation d'une promo
+p = Promo(nbEleves, nbProjets, critereEleveInitial, citereProjetInitial)
 
+################################## AJOUT LISTE ELEVES ##################################
+################################## AJOUT LISTE ELEVES ##################################
 
-print "Liste des eleves"
+numero = 0;
 for i in matrice[0]:	
-	print("Eleve "+str(num)+" / Nom : "+str(i))#+" / Pref eleve : "+str(matrice[num+1][1:48]))
-	p.ajouterEleve(num, matrice[num+1][1:48],pTest, i)
-	num += 1
-print "\n"
-
-
+	prefEleveCsv = matrice[numero+1][1:48]
+	p.ajouterEleve(numero, prefEleveCsv, prefProjetTB, i)
+	numero += 1
+	
 ################################## AJOUT PROJET ##################################
 ################################## AJOUT PROJET ##################################
-for i in range(0,len(pTest)):
+
+for i in range(0,len(prefProjetTB)):
 	p.ajouterProjet(i)
 
 ################################## INITIALISATION ELEVES ##################################
 ################################## INITIALISATION ELEVES ##################################
 
 for i in p.eleves:
-	p.noteMajoritaire2(i)
-	i.elevePrefere(p) #Trie les eleves prefere de i dans l'ordre (plus prefere -> moins prefere)
-	i.projetPrefere(p) #Trie les projets prefere de i dans l'ordre (plus prefere -> moins prefere)
-
-#Copie de la liste d'eleve dans une liste temporaire (car sinon quicksort modifie la liste)
-elevesTemp = []
-for i in p.eleves:
-	elevesTemp.append(i)
+	p.noteMajoritaire(i)
+	#Trie les eleves prefere de i dans l'ordre (plus prefere -> moins prefere)
+	i.elevePrefere(p) 
+	#Trie les projets prefere de i dans l'ordre (plus prefere -> moins prefere)
+	i.projetPrefere(p) 
 
 #Calcul du classement des elves du moins aime au plus aime
-p.classementEleve = p.mentionSort()
+p.classementEleve = p.trieEleve()
 #p.mentionSort(p.classementEleve)
 
 #On autorise 2 camarades maximum pour un eleve 
 nbCamarades = 2
 
+#Calcul du nombre de trinome a former
+nbTrinome = 0
+nbTrinomeMax = p.calculNbTrinome()
+
 #Variable qui teste si la repartition est finie
 end = False
 
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-print("Matrice preference eleves")
-d = raw_input("Afficher (Oui/Non)? ")
-detail = (d=="Oui")
-if detail:
-	for i in p.prefEleves:
-		print(i)
-	print('\n')
+print "INITIALISATION DES DONNEES completed\n"
+################################## AFFICHAGE ##################################
+################################## AFFICHAGE ##################################
+print "Taille de la promo : ", p.n
+print "Nombre de trinome necessaire : ", nbTrinomeMax, "\n"
 
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-
-print("Matrice preference projets")
-d = raw_input("Afficher (Oui/Non)? ")
-detail = (d=="Oui")
-if detail:
-	for i in p.prefProjets:
-		print(i)
-	print('\n')
-
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-################################## AFFICHAGE MATRICE PREF GLOBAL ##################################
-
-print("Classement eleves du moins aime au plus aime")
-c=1
-for i in p.classementEleve:
-	print(str(c)+") "+str(i.numeroEleve+1)+" / "+str(i.note)+" : "+str(i.mention)+" / Nom : "+str(i.nom))
-	c += 1
-print('\n')
-
-################################## Nb binome ##################################
-################################## Nb binome ##################################
-
-nbTrinome = 0
-nbTrinomeMax = p.calculNbTrinome()
+affichageEleves(matrice, prefProjetTB)
+affichageMatrice(p.prefEleves, "eleves")
+affichageMatrice(p.prefProjets, "projets")
+affichageClassement(p)
 
 ################################## DEBUT ALGO ##################################
 ################################## DEBUT ALGO ##################################

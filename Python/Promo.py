@@ -33,29 +33,8 @@ class Promo:
 		p = Projet(numero)
 		self.projets.append(p)
 
+
 	def noteMajoritaire(self, eleve):
-	# noteMajoritaire : int -> str
-    # Donnees : eleve, le numero de l'eleve a noter
-    # Preconditions :               
-    # Resultat : retourne la note majoritaire de l'eleve
-		notes = []
-
-		for i in range(len(self.prefEleves)):
-			notes.append(self.prefEleves[i][eleve.numeroEleve])
-		
-		T = notes.count('TB')
-		B = notes.count('B')
-		AB = notes.count('AB')
-		P = notes.count('P')
-		I = notes.count('I')
-		AR = notes.count('AR')
-
-		score = AR + I*2 + P*3 + AB*4 + B*5 + T*6
-		eleve.majNote(score)
-
-		return score
-
-	def noteMajoritaire2(self, eleve):
 	# noteMajoritaire : int -> str
     # Donnees : eleve, le numero de l'eleve a noter
     # Preconditions :               
@@ -104,23 +83,35 @@ class Promo:
 		nbF = 0
 		if(noteM=='TB'):
 			score = 6
+			nbMentionMoins = notes.count('B')
+			nbMentionPlus = 0
 		elif(noteM=='B'):
 			nbD = len(debut)-debut.count('B')
 			nbF = len(fin)-fin.count('B')
 			score = 5
+			nbMentionMoins = notes.count('AB')
+			nbMentionPlus = notes.count('TB')
 		elif(noteM=='AB'):
 			nbD = len(debut)-debut.count('AB')
 			nbF = len(fin)-fin.count('AB')
 			score = 4
+			nbMentionMoins = notes.count('P')
+			nbMentionPlus = notes.count('B')
 		elif(noteM=='P'):
 			nbD = len(debut)-debut.count('P')
 			nbF = len(fin)-fin.count('P')
+			nbMentionMoins = notes.count('I')
+			nbMentionPlus = notes.count('AB')
 			score = 3
 		elif(noteM=='I'):
 			nbD = len(debut)-debut.count('I')
 			nbF = len(fin)-fin.count('I')
+			nbMentionMoins = notes.count('AR')
+			nbMentionPlus = notes.count('P')
 			score = 2
 		elif(noteM=='AR'):
+			nbMentionMoins = 0
+			nbMentionPlus = notes.count('I')
 			score = 1
 
 		if(nbD>nbF):
@@ -128,121 +119,40 @@ class Promo:
 		elif(nbD<nbF):
 				eleve.mention='-'
 
-		eleve.majNote(score)
+		eleve.majNote(score, nbMentionMoins, nbMentionPlus)
 
 		return score
 
-
-	def quickSort(self, x):
-
-		if len(x) == 1 or len(x) == 0:
-			return x
-		else:
-			pivot = x[0]
-			i = 0
-			for j in range(len(x)-1):
-				if x[j+1].note < pivot.note:
-					x[j+1], x[i+1] = x[i+1], x[j+1]
-					i += 1
-			x[0], x[i] = x[i], x[0]
-			first_part = self.quickSort(x[:i])
-			second_part = self.quickSort(x[i+1:])
-			first_part.append(x[i])
-
-			return first_part + second_part
-
-	def mentionSort(self):
-		lTemp = []
+	def trieEleve(self):
+		eleveTrie = []
 		lMoins = []
 		lNeutre = []
 		lPlus = []
+		mentionTab = [lMoins, lNeutre, lPlus]
+
 		for i in range(1,7):
 			for j in self.eleves:
 				if j.note==i:
 					if j.mention=='-':
 						lMoins.append(j)
-			for j in self.eleves:
-				if j.note==i:
-					if j.mention=="nulle":
+					elif j.mention=="nulle":
 						lNeutre.append(j)
-			for j in self.eleves:
-				if j.note==i:
-					if j.mention=='+':
+					elif j.mention=='+':
 						lPlus.append(j)
-			while (len(lMoins) != 0):
-				z = random.randint(0, len(lMoins)-1)
-				lTemp.append(lMoins[z])
-				lMoins.remove(lMoins[z])
-			while (len(lNeutre) != 0):
-				z = random.randint(0, len(lNeutre)-1)
-				lTemp.append(lNeutre[z])
-				lNeutre.remove(lNeutre[z])
-			while (len(lPlus) != 0):
-				z = random.randint(0, len(lPlus)-1)
-				lTemp.append(lPlus[z])
-				lPlus.remove(lPlus[z])
+			j = 0
+			while (len(mentionTab[0]) != 0 or len(mentionTab[1]) != 0 or len(mentionTab[2]) !=0):
+				if (len(mentionTab[j]) == 0):
+					j += 1
+				else: 
+					eleveChoisit = mentionTab[j][0]
+					for k in range(1, len(mentionTab[j])):
+						r = mentionTab[j][k]
+						if r.nbMentionPlus-r.nbMentionMoins < eleveChoisit.nbMentionPlus-eleveChoisit.nbMentionMoins:
+							eleveChoisit = r
+					eleveTrie.append(eleveChoisit)
+					mentionTab[j].remove(eleveChoisit)				
 
-		return lTemp
-
-			
-
-	def classerEleve(self):
-		#On creer des tableau temporaire pour recuperer les eleves en fonction de leurs noteMajoritaire
-		T = []
-		B = []
-		AB = []
-		P = []
-		I = []
-		AR = []
-
-		indice = 0
-		#Pour chaque eleve on l'ajoute dans le tableau qui lui correspond
-		for i in self.eleves:
-			if (self.noteMajoritaire(i)=='TB'):
-				T.append(self.eleves[indice])
-			elif (self.noteMajoritaire(i)=='B'):
-				B.append(self.eleves[indice])
-			elif (self.noteMajoritaire(i)=='AB'):
-				AB.append(self.eleves[indice])
-			elif (self.noteMajoritaire(i)=='P'):
-				P.append(self.eleves[indice])
-			elif (self.noteMajoritaire(i)=='I'):
-				I.append(self.eleves[indice])
-			elif (self.noteMajoritaire(i)=='AR'):
-				AR.append(self.eleves[indice])
-			indice += 1
-
-		#On choisit un eleve au hasard en commencant par les eleves les moins apprecie, puis on l'ajoute dans le classement
-		while (len(AR) != 0):
-			i = random.randint(0, len(AR)-1)
-			self.classementEleve.append(AR[i])
-			AR.remove(AR[i])
-
-		while (len(I) != 0):
-			i = random.randint(0, len(I)-1)
-			self.classementEleve.append(I[i])
-			I.remove(I[i])
-
-		while (len(P) != 0):
-			i = random.randint(0, len(P)-1)
-			self.classementEleve.append(P[i])
-			P.remove(P[i])
-
-		while (len(AB) != 0):
-			i = random.randint(0, len(AB)-1)
-			self.classementEleve.append(AB[i])
-			AB.remove(AB[i])
-
-		while (len(B) != 0):
-			i = random.randint(0, len(B)-1)
-			self.classementEleve.append(B[i])
-			B.remove(B[i])
-
-		while (len(T) != 0):
-			i = random.randint(0, len(T)-1)
-			self.classementEleve.append(T[i])
-			T.remove(T[i])
-
+		return eleveTrie
 
 	def binomeValide(self, e2, e1): #e2 , #e5
 
@@ -334,10 +244,8 @@ class Promo:
 		return projet
 
 	def calculNbTrinome (self):
-		print "Taille promo = ", self.n
 		if (self.n<=54 and self.n>=36):
 			trinome = self.n%18
 		elif (self.n<36):
 			trinome = self.n%2
-		print "il faut ", trinome, "trinome"
 		return trinome
