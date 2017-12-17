@@ -79,45 +79,67 @@ class Promo:
 			debut=notes[0:(len(notes)-1)/2]
 			fin=notes[(len(notes)+1)/2: len(notes)]
 
-		nbD = 0
-		nbF = 0
+		nbMentionMoins = 0
+		nbMentionPlus = 0
 		if(noteM=='TB'):
 			score = 6
-			nbMentionMoins = notes.count('B')
+			nbMentionMoins += notes.count('B')
+			nbMentionMoins += notes.count('AB')
+			nbMentionMoins += notes.count('P')
+			nbMentionMoins += notes.count('I')
+			nbMentionMoins += notes.count('AR')
+
 			nbMentionPlus = 0
 		elif(noteM=='B'):
 			nbD = len(debut)-debut.count('B')
 			nbF = len(fin)-fin.count('B')
 			score = 5
-			nbMentionMoins = notes.count('AB')
-			nbMentionPlus = notes.count('TB')
+			nbMentionMoins += notes.count('AB')
+			nbMentionMoins += notes.count('P')
+			nbMentionMoins += notes.count('I')
+			nbMentionMoins += notes.count('AR')
+			nbMentionPlus += notes.count('TB')
 		elif(noteM=='AB'):
 			nbD = len(debut)-debut.count('AB')
 			nbF = len(fin)-fin.count('AB')
 			score = 4
-			nbMentionMoins = notes.count('P')
-			nbMentionPlus = notes.count('B')
+			nbMentionMoins += notes.count('P')
+			nbMentionMoins += notes.count('I')
+			nbMentionMoins += notes.count('AR')
+			nbMentionPlus += notes.count('B')
+			nbMentionPlus += notes.count('TB')
 		elif(noteM=='P'):
 			nbD = len(debut)-debut.count('P')
 			nbF = len(fin)-fin.count('P')
-			nbMentionMoins = notes.count('I')
-			nbMentionPlus = notes.count('AB')
+			nbMentionMoins += notes.count('I')
+			nbMentionMoins += notes.count('AR')
+
+			nbMentionPlus += notes.count('AB')
+			nbMentionPlus += notes.count('B')
+			nbMentionPlus += notes.count('TB')
 			score = 3
 		elif(noteM=='I'):
 			nbD = len(debut)-debut.count('I')
 			nbF = len(fin)-fin.count('I')
-			nbMentionMoins = notes.count('AR')
-			nbMentionPlus = notes.count('P')
+			nbMentionMoins += notes.count('AR')
+			nbMentionPlus += notes.count('P')
+			nbMentionPlus += notes.count('AB')
+			nbMentionPlus += notes.count('B')
+			nbMentionPlus += notes.count('TB')
 			score = 2
 		elif(noteM=='AR'):
 			nbMentionMoins = 0
-			nbMentionPlus = notes.count('I')
+			nbMentionPlus += notes.count('I')
+			nbMentionPlus += notes.count('P')
+			nbMentionPlus += notes.count('AB')
+			nbMentionPlus += notes.count('B')
+			nbMentionPlus += notes.count('TB')
 			score = 1
 
-		if(nbD>nbF):
-				eleve.mention='+'
-		elif(nbD<nbF):
+		if(nbMentionMoins>nbMentionPlus):
 				eleve.mention='-'
+		elif(nbMentionMoins<nbMentionPlus):
+				eleve.mention='+'
 
 		eleve.majNote(score, nbMentionMoins, nbMentionPlus)
 
