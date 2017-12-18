@@ -119,7 +119,7 @@ class Promo:
 		elif(nbD<nbF):
 				eleve.mention='-'
 
-		eleve.majNote(score, nbMentionMoins, nbMentionPlus)
+		eleve.majNote(score, nbD, nbF)
 
 		return score
 
@@ -147,8 +147,15 @@ class Promo:
 					eleveChoisit = mentionTab[j][0]
 					for k in range(1, len(mentionTab[j])):
 						r = mentionTab[j][k]
-						if r.nbMentionPlus-r.nbMentionMoins < eleveChoisit.nbMentionPlus-eleveChoisit.nbMentionMoins:
-							eleveChoisit = r
+						if j==0:
+							if r.nbMentionMoins > eleveChoisit.nbMentionMoins:
+								eleveChoisit = r
+						elif j==1:
+							if r.nbMentionPlus-r.nbMentionMoins < eleveChoisit.nbMentionPlus-eleveChoisit.nbMentionMoins:
+								eleveChoisit = r
+						elif j==2:
+							if r.nbMentionPlus < eleveChoisit.nbMentionPlus:
+								eleveChoisit = r
 					eleveTrie.append(eleveChoisit)
 					mentionTab[j].remove(eleveChoisit)				
 

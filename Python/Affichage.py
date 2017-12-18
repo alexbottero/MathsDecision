@@ -6,7 +6,7 @@ def affichageEleves(matrice, prefProjetTB):
 		print "\nLISTE ELEVES\n"
 		numero = 0;
 		for i in matrice[0]:
-			if (numero<10):
+			if (numero+1<10):
 				print "Eleve ", numero, "  | Nom : ", i	
 			else:
 				print "Eleve ", numero, " | Nom : ", i	
@@ -17,7 +17,7 @@ def affichageClassement(p):
 	d = raw_input("Afficher "+msg+" (Oui/Non)? ")
 	detail = (d=="Oui")
 	if detail:	
-		print("Classement decroissant des eleves selon leur classement\n")
+		print("\nClassement decroissant des eleves selon leur classement\n")
 		c=1
 		print "nbmm = Nombre de mention juste en dessous de la majoritaire"
 		print "nbmp = Nombre de mention juste au dessus de la majoritaire\n"
@@ -27,8 +27,8 @@ def affichageClassement(p):
 			if(c<10):
 				msg += " "
 
-			msg += " e"+str(i.numeroEleve)
-			if(i.numeroEleve<10):
+			msg += " e"+str(i.numeroEleve+1)
+			if(i.numeroEleve+1<10):
 				msg += " "
 
 			msg += "    | "
@@ -58,14 +58,14 @@ def affichageClassement(p):
 
 			print msg
 			c += 1
-	print('\n')
+		print('\n')
 
 def affichageMatrice (matrice, libelle):
-	msg = "Matrice preference " +libelle 
+	msg = "Matrice preference" +libelle 
 	d = raw_input("Afficher "+msg+" (Oui/Non)? ")
 	detail = (d=="Oui")
 	if detail:
-		print msg
+		print "\n", msg, "\n"
 		for i in matrice:
 			print(i)
-	print('\n')
+		print('\n')

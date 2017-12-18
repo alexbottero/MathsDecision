@@ -91,6 +91,8 @@ if(p.n<4):
 
 d = raw_input("Voulez-vous les details de la repartition (Oui/Non) ? ")
 detail = (d=="Oui")
+#a = raw_input("Voulez-vous les creations de binomes et trinomes (Oui/Non) ? ")
+creation = (False)
 
 #Temps de debut
 debut=time.time()
@@ -107,11 +109,14 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 		if(p.critereP<p.p-1):
 			p.critereP+=1;
 		if detail:
-			print "\n"
-			print("On va parcourir tout le classement des eleves, on essaye de trouver des binome (b1, b2) tel que : b1 appartient au "+str(p.critereE)+" premiers eleves les plus preferes de b2 (et vice versa)")
-			if(nbTrinome<nbTrinomeMax):
-				print "De plus, nous avons forme que ", nbTrinome, " trinomes sur ", nbTrinomeMax, " demandes. On va alors aussi essayez de former des trinome (t1, t2, t3), tel que : t1 appartient au ", p.critereE, " premiers eleves preferes de t2 et t3 (et vice versa pour t2 et t3)"
-			print("Si on trouver deux eleves compatible, on chercher un projet tel que : projet appartient au "+str(p.critereP)+" premiers projets preferes de b1 et b2\n")
+			print "\nMETHODE DE L'ALGORITHME\n"
+			print "A chaque tour de l'algorithme, nous parcourons tout le classement d'eleves ET nous formons des binomes qui respecte un critere particulier.\n"
+			print "Ce critere est un entier, initialement egal a 1, qui augmente a chaque tour.\n"
+			print "EXEMPLE : Critere = 12, alors deux eleves (e1, e2) forment un binome SI :\n"
+			print "                 e1 appartient au 12 premiers eleves preferes de e2\n"
+			print "                 e2 appartient au 12 premiers eleves preferes de e1\n"
+			print "Comme nous savons combien de trinomes nous devons former, lorsque l'on etudie la compatibilite de deux eleves, si l'un deux possede deja un binome on essaye alors de former un trinome qui respecte le critere decrit juste avant.\n"
+
 			d = raw_input("Continuer ? ")
 			detail = not(d=="Non")
 
@@ -163,11 +168,11 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 
 					p.eleveRepartis+=1
 
-				if detail:
-					msg = "Creation dernier groupe : e"+str(dernierE[0].numeroEleve+1)+", e"+str(dernierE[1].numeroEleve+1)+", p"+str(dernierP.numeroProjet+1)+"\n"
+				if creation and end:
+					msg = "Creation dernier groupe : e"+str(dernierE[0].numeroEleve+1)+", e"+str(dernierE[0].numeroEleve+1)+", p"+str(dernierP.numeroProjet+1)+"\n"
 					print(msg)
 					d = raw_input("Continuer ? ")
-					detail = not(d=="Non")
+					creation = not(d=="Non")
 
 
 
@@ -285,21 +290,21 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 					if (len(i.camarades)==0 and len(e2.camarades)==0):
 						p.eleveRepartis += 2
 
-						if detail:
+						if creation:
 							msg = "Creation groupe : e"+str(i.numeroEleve+1)+", e"+str(e2.numeroEleve+1)+", p"+str(pr.numeroProjet+1)
 							print(msg)						
 							d = raw_input("Continuer ? ")
-							detail = not(d=="Non")
+							creation = not(d=="Non")
 						pr.groupe.append(i)
 						pr.groupe.append(e2)
 
 					#Si i avait un camarades, on sauvegarde juste l'eleve prefere dans le projet
 					elif (len(i.camarades)==1):
-						if detail:
+						if creation:
 							msg = "Creation trinome : e"+str(i.numeroEleve+1)+", e"+str(e2.numeroEleve+1)+", e"+str(i.camarades[0].numeroEleve+1)+", p"+str(pr.numeroProjet+1)
 						
 							d = raw_input("Continuer ? ")
-							detail = not(d=="Non")
+							creation = not(d=="Non")
 				
 						i.camarades[0].camarades.append(e2)
 						e2.camarades.append(i.camarades[0])						
@@ -309,11 +314,11 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 
 					#Si l'eleve prefere avait un cmarades, on sauvegarde juste i dans le projet
 					elif (len(e2.camarades)==1):
-						if detail:
+						if creation:
 							msg = "Creation trinome : e"+str(i.numeroEleve+1)+", e"+str(e2.numeroEleve+1)+", e"+str(e2.camarades[0].numeroEleve+1)+", p"+str(pr.numeroProjet+1)
 							print(msg)
 							d = raw_input("Continuer ? ")
-							detail = not(d=="Non")
+							creation = not(d=="Non")
 						e2.camarades[0].camarades.append(i)
 						i.camarades.append(e2.camarades[0])
 						pr.groupe.append(i)
@@ -350,6 +355,13 @@ while((p.critereE<p.n or p.critereP<p.p) and not(end)):
 #Affichage
 
 print("Fin repartition\n")
+
+repartition = []
+for i in p.projets:
+	repartition.append(i.groupe)
+
+writeCsv2("GROUPES.csv", repartition)
+
 print("REPARTITION\n")
 for i in p.projets:
 	answer = "Projet : p"+str(i.numeroProjet+1)+". Eleve : "
