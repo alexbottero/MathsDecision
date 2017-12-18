@@ -1,6 +1,7 @@
 import random
 import time
 import sys
+import csv
 from Eleve import * ;
 from Projet import * ;
 from Promo import * ;
@@ -11,8 +12,8 @@ print "\nDEBUT DU PROGRAMME\n"
 
 # Recuperation du csv entre en ligne de commande
 print "PARSER CSV"
-csv = str(sys.argv[1])
-matrice = parseCSV(csv)
+Entree = str(sys.argv[1])
+matrice = parseCSV(Entree)
 matrice[0].remove("Nom")
 print "PARSER CSV completed\n"
 
@@ -363,12 +364,17 @@ for i in p.projets:
 writeCsv2("GROUPES.csv", repartition)
 
 print("REPARTITION\n")
+fname="GROUPES.csv"
+sortie=open(fname,"wb")
 for i in p.projets:
-	answer = "Projet : p"+str(i.numeroProjet+1)+". Eleve : "
+	answer = str(i.numeroProjet+1)+","
 	for j in i.groupe:
-		answer +=str(j.nom)+". " 
-	print(answer)
-print('\n')
+		answer +=str(j.nom)+"," 
+	answer=answer[:-1]
+	answer +="\n"
+
+	sortie.write(answer)
+sortie.close()
 
 fin=time.time()
 temps = fin-debut
